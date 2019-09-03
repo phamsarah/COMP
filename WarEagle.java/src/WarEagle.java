@@ -11,7 +11,7 @@ public final class WarEagle {
    /**
     * Driver for the WarEagle class.
     */
-   public static void main(tring[] args) {
+   public static void main(String[] args) {
       System.out.println(cheer1());
       System.out.println(cheer2());
    }

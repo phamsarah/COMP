@@ -44,22 +44,36 @@ public class Student implements Comparable<Student> {
     */
    @Override
    public int compareTo(Student s) {
-	   System.out.println(s);
-	   System.out.println(this.lname);
-	 if(this.lname.compareTo(s.getLastName()) > 0)
-	 {
-		 return 1;
-	 }
-	 
-	 else if(this.lname.compareTo(s.getLastName()) < 0)
-	 {
-		 return 0;
-	 }
-	 
-	 
+
+	   int result = this.lname.compareTo(s.getLastName());
+	   if(result > 0 || result < 0)
+	   {
+		   return result;
+	   }
+	   else
+	   {
+		   int firstName = this.fname.compareTo(s.getFirstName());
+		   if(firstName > 0 || firstName < 0)
+		   {
+			   return firstName;
+		   }
+		   else
+		   {
+			   if(this.section > s.getSection())
+			   {
+				   return 1;
+			   }
+			   else if (this.section < s.getSection())
+			   {
+				   return -1;
+			   }
+			   else
+			   {
+				   return 0;
+			   }
+		   }
+	   }
 	   
-	   
-      return 1;
    }
 
    /** Returns a string representation of this student. */
