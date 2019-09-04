@@ -50,9 +50,9 @@ public final class Selector {
     */
    public static int max(int[] a) {   
 	   if(a == null || a.length == 0)
-		   {
-			   throw new IllegalArgumentException();
-		   }
+	   {
+		  throw new IllegalArgumentException();
+	    }
 	   int max_value = a[0];
 	   for(int i = 0; i < a.length; i++)
 	   	{
@@ -74,7 +74,55 @@ public final class Selector {
     * changed by this method.
     */
    public static int kmin(int[] a, int k) {
-      return -99;
+	   
+	   Arrays.sort(a); // numerical order
+	   int reoccurrence = k - 1; // number of reoccurrence
+	   int minimum = a[0];
+	   int positionKth = 0;
+	   boolean kmin = false;
+	   
+	   System.out.println("reoccurrence: " + reoccurrence);
+	   
+	   int[] noDuplicates = removeDuplicates(a);
+	   
+	   for(int i = 0; i < noDuplicates.length; i++)
+	   {
+		   System.out.println("no duplicates: " + noDuplicates[i]);
+	   }
+	   
+      return minimum;
+   }
+   
+   
+   private static int[] removeDuplicates(int[] a)
+   { 
+	   int[] tempArray = new int[a.length];
+	         
+	   int j = 0;
+	   
+	   for(int i = 0; i < a.length - 1; i++)
+	   {
+		 int currentElement = a[i];
+		 
+		 if(currentElement != a[i + 1])
+		 {
+			tempArray[j++] = currentElement;
+		 }
+	   }
+	   
+	    
+	   tempArray[j++] = a[a.length - 1];
+	   int[] returnArray = new int[j];
+	   
+	   int k = 0;
+	   
+	   for(int i = 0 ; i < j; i++)
+	   {
+		   returnArray[i] = tempArray[k];
+		   k++; 
+	   }
+	         
+	   return returnArray;
    }
 
 
