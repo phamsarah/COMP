@@ -75,24 +75,23 @@ public final class Selector {
     */
    public static int kmin(int[] a, int k) {
 	   
-	   Arrays.sort(a); // numerical order
-	   int reoccurrence = k - 1; // number of reoccurrence
-	   int minimum = a[0];
-	   int positionKth = 0;
-	   boolean kmin = false;
-	   
-	   System.out.println("reoccurrence: " + reoccurrence);
-	   
+	   Arrays.sort(a); 
+	   int valuesLess = k - 1; 
 	   int[] noDuplicates = removeDuplicates(a);
+	   int k1 = hasKthMin(noDuplicates, valuesLess);
 	   
-	   for(int i = 0; i < noDuplicates.length; i++)
-	   {
-		   System.out.println("no duplicates: " + noDuplicates[i]);
-	   }
 	   
-      return minimum;
+      return k1;
    }
    
+   
+   /**
+    * removeDuplicates compares the current value in the array with the next and will
+    * add the value if it's not a duplicate to a temporary array. The temporary array will then 
+    * be added to an array with the "fixed" sized with that array being returned.
+    * @param a the array containing duplicates
+    * @return returnArray the array containing no duplicates
+    */
    
    private static int[] removeDuplicates(int[] a)
    { 
@@ -124,6 +123,51 @@ public final class Selector {
 	         
 	   return returnArray;
    }
+   
+   /**
+    * hasKthMin checks for kMin and compares the position with the (k-1) value
+    * if i (the position) equals the (k-1) then it has (k-1) values less than 
+    * the value at i.
+    * @param a the array with no duplicates contained
+    * @param valuesLess the (k-1) value, how many values that are less than k
+    * @return minimum the kMin
+    */
+   
+   private static int hasKthMin(int[] a, int valuesLess)
+   {
+	   int minimum = 0;
+	   for(int i = 0; i < a.length; i++)
+	   {
+		   if(i == valuesLess)	
+		   {
+			   minimum = a[i];
+		   }
+	   }
+	   
+	   return minimum;
+   }
+   
+   /**
+    * hasKthMax compares the number of values that are right of the current value
+    * with valuesLess (k-1), if they equal then kMax is found.
+    * @param a the array with no duplicates contained
+    * @param valuesLess the (k-1) value
+    * @return maximum the kMax
+    */
+   
+   private static int hasKthMax(int[] a, int valuesLess)
+   {
+	   int maximum = 0;
+	   for(int i = 0; i < a.length; i++)
+	   {
+		   if(((a.length - 1) - i) == valuesLess)
+		   {
+			   maximum = a[i];
+		   }
+	   }
+	   
+	   return maximum;
+   }
 
 
    /**
@@ -135,7 +179,13 @@ public final class Selector {
     * changed by this method.
     */
    public static int kmax(int[] a, int k) {
-      return -99;
+	   Arrays.sort(a); 
+	   int valuesLess = k - 1; 
+	   int[] noDuplicates = removeDuplicates(a);
+	   int k1 = hasKthMax(noDuplicates, valuesLess);
+	   
+	   
+      return k1;
    }
 
 
