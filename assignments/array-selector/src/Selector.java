@@ -75,11 +75,16 @@ public final class Selector {
     */
    public static int kmin(int[] a, int k) {
 	   
-	   Arrays.sort(a); 
-	   int valuesLess = k - 1; 
-	   int[] noDuplicates = removeDuplicates(a);
-	   int k1 = hasKthMin(noDuplicates, valuesLess);
+	   check(a, k);
+	   int temp[] = Arrays.copyOf(a, a.length);
 	   
+	   Arrays.sort(temp); 
+	   
+	   int valuesLess = k - 1; 
+	   int[] noDuplicates = removeDuplicates(temp);
+	   
+	   check(noDuplicates, k);  
+	   int k1 = hasKthMin(noDuplicates, valuesLess);
 	   
       return k1;
    }
@@ -95,6 +100,7 @@ public final class Selector {
    
    private static int[] removeDuplicates(int[] a)
    { 
+	   
 	   int[] tempArray = new int[a.length];
 	         
 	   int j = 0;
@@ -135,6 +141,7 @@ public final class Selector {
    
    private static int hasKthMin(int[] a, int valuesLess)
    {
+	   
 	   int minimum = 0;
 	   for(int i = 0; i < a.length; i++)
 	   {
@@ -155,8 +162,10 @@ public final class Selector {
     * @return maximum the kMax
     */
    
+   
    private static int hasKthMax(int[] a, int valuesLess)
    {
+	   
 	   int maximum = 0;
 	   for(int i = 0; i < a.length; i++)
 	   {
@@ -179,13 +188,39 @@ public final class Selector {
     * changed by this method.
     */
    public static int kmax(int[] a, int k) {
-	   Arrays.sort(a); 
+	   
+	   check(a, k);
+	   int[] temp = Arrays.copyOf(a, a.length);
+	   
+	   Arrays.sort(temp); 
+	   
 	   int valuesLess = k - 1; 
-	   int[] noDuplicates = removeDuplicates(a);
+	   int[] noDuplicates = removeDuplicates(temp);
+	   
+	   check(noDuplicates, k);
+	   
 	   int k1 = hasKthMax(noDuplicates, valuesLess);
 	   
-	   
       return k1;
+   }
+   
+   /**
+    * check checks to see if the array is null, of length 0, 
+    * or if k exceeds the length of array a and 
+    * throws an exception if it is.
+    * @param a the unchecked array that may contain duplicates
+    */
+   
+   private static void check(int[] a, int k)
+   {
+	   if(a == null || a.length == 0)
+	   {
+		   throw new IllegalArgumentException();
+	   }
+	   else if(k > a.length)
+	   {
+		   throw new IllegalArgumentException();
+	   }
    }
 
 
