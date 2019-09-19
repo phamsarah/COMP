@@ -110,51 +110,26 @@ public final class Selector {
 		   throw new NoSuchElementException();
 	   }
 	   
-	   T kmin = null;
-	   T tempMin = null;
-	   boolean firstIteration = true;
-	   boolean large = true;
 	   
-	   for(int i = 0; i < k; i++)
+	   ArrayList<T> temp = new ArrayList<T>(removeDuplicates(coll));
+	   
+	   T minimum = null;
+	   temp.sort(comp);
+	   
+	   for(int i = 0; i < temp.size(); i++)
+		{
+		   if(i == (k - 1))
+			{	
+			   minimum = temp.get(i);
+			}
+		}
+	   
+	   if(k > temp.size())
 	   {
-		   for(T value : coll)
-		   {
-			   if(tempMin == null)
-			   {
-				   tempMin = value;
-			   }
-			   
-			   if(firstIteration)
-			   {
-				   if(comp.compare(value, tempMin) < 0)
-					   tempMin = value;
-			   }
-			   else
-			   {
-				   if(large && comp.compare(value, kmin) > 0)
-				   {
-					   large = false;
-					   tempMin = value;;
-					   
-				   }
-				   else if(comp.compare(value, kmin) > 0 && comp.compare(value, tempMin) < 0)
-					   tempMin = value;
-			   }
-		   }
-		   
-		   
-	   }
-	   
-	   firstIteration = false;
-	   
-	   if(tempMin.equals(kmin)) {
 		   throw new NoSuchElementException();
 	   }
-	   else {
-		   kmin = tempMin;
-	   }
 	   
-	   return kmin;
+	   return minimum;
    }
 
 
@@ -173,59 +148,36 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T kmax(Collection<T> coll, int k, Comparator<T> comp) {
+	   
 	   check(coll, comp);
 	   
 	   if(k > coll.size() || k <= 0) {
 		   throw new NoSuchElementException();
 	   }
 	   
-	   T kmax = null;
-	   T tempMax = null;
-	   boolean firstIteration = true;
-	   boolean small = true;
 	   
-	   for(int i = 0; i < k; i++)
+	   ArrayList<T> temp = new ArrayList<T>(removeDuplicates(coll));
+	   
+	   T maximum = null;
+	   temp.sort(comp);
+	   
+	   for(int i = 0; i < temp.size(); i++)
+		{
+		   if(((temp.size() - 1) - i) == (k - 1))
+			{	
+				maximum = temp.get(i);
+			}
+		}
+	   
+	   if(k > temp.size())
 	   {
-		   for(T value : coll)
-		   {
-			   if(tempMax == null)
-			   {
-				   tempMax = value;
-			   }
-			   
-			   if(firstIteration)
-			   {
-				   if(comp.compare(value, tempMax) > 0)
-					   tempMax = value;
-			   }
-			   else
-			   {
-				   if(small && comp.compare(value, kmax) < 0)
-				   {
-					   small = false;
-					   tempMax = value;;
-					   
-				   }
-				   else if(comp.compare(value, kmax) < 0 && comp.compare(value, tempMax) > 0)
-					   tempMax = value;
-			   }
-		   }
-		   
-		   
-	   }
-	   
-	   firstIteration = false;
-	   
-	   if(tempMax.equals(kmax)) {
 		   throw new NoSuchElementException();
 	   }
-	   else {
-		   kmax = tempMax;
-	   }
 	   
-	   return kmax;
+	   return maximum;
 	   
    }
+   
 
 
    /**
@@ -355,6 +307,16 @@ public final class Selector {
 	   return finalFloor;
    }
    
+   /**
+    * Check will check to see if coll or comp is null and will throw a new 
+    * IllegalArgumentException. If coll is empty, NoSuchElementException will
+    * be thrown.
+    * @param <T> generic
+    * @param coll arrayList containing potential duplicates
+    * @param comp The comparator
+    */
+   
+   
    private static <T> void check(Collection <T> coll, Comparator<T> comp)
    {
 	   
@@ -367,6 +329,29 @@ public final class Selector {
 		   throw new NoSuchElementException();
 	   }
 	   
+   }
+   
+   /**
+    * removeDuplicates sees if there is any value that is not in the newly created temp arraylist
+    * and adds it from the coll arraylist.
+    * @param coll the arrayList containing duplicates
+    * @return tempArray the arraylist containing no duplicates
+    */
+   
+   private static <T> ArrayList<T> removeDuplicates(Collection <T> coll)
+   { 
+	   
+	   ArrayList<T> tempArray = new ArrayList<T>();
+	   
+	   for(T value : coll)
+	   {
+		   if(!tempArray.contains(value))
+		   {
+			   tempArray.add(value);
+		   }
+	   }
+
+	   return tempArray;
    }
 
 }
