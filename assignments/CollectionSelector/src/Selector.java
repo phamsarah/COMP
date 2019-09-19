@@ -51,6 +51,7 @@ public final class Selector {
 		  if (comp.compare(other, min) < 0) min = other;
 	  }
       return min;
+      
    }
 
 
@@ -67,9 +68,23 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T max(Collection<T> coll, Comparator<T> comp) {
-	   //check(coll, comp);
+	   check(coll, comp);
 	   
-	   return null;
+	   Iterator <T> iterator = coll.iterator();
+	   
+		  T max = null;
+		  
+		  while (iterator.hasNext()) {
+			  if (max == null) {
+				  max = iterator.next();
+				  continue;
+			  }
+			  T other = iterator.next();
+			  if (comp.compare(other, max) > 0) max = other;
+		  }
+		  
+	      return max;
+	  
    }
 
 
@@ -88,11 +103,58 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T kmin(Collection<T> coll, int k, Comparator<T> comp) {
-	   //check(coll, comp);
 	   
+	   check(coll, comp);
 	   
+	   if(k > coll.size() || k <= 0) {
+		   throw new NoSuchElementException();
+	   }
 	   
-	   return null;
+	   T kmin = null;
+	   T tempMin = null;
+	   boolean firstIteration = true;
+	   boolean large = true;
+	   
+	   for(int i = 0; i < k; i++)
+	   {
+		   for(T value : coll)
+		   {
+			   if(tempMin == null)
+			   {
+				   tempMin = value;
+			   }
+			   
+			   if(firstIteration)
+			   {
+				   if(comp.compare(value, tempMin) < 0)
+					   tempMin = value;
+			   }
+			   else
+			   {
+				   if(large && comp.compare(value, kmin) > 0)
+				   {
+					   large = false;
+					   tempMin = value;;
+					   
+				   }
+				   else if(comp.compare(value, kmin) > 0 && comp.compare(value, tempMin) < 0)
+					   tempMin = value;
+			   }
+		   }
+		   
+		   
+	   }
+	   
+	   firstIteration = false;
+	   
+	   if(tempMin.equals(kmin)) {
+		   throw new NoSuchElementException();
+	   }
+	   else {
+		   kmin = tempMin;
+	   }
+	   
+	   return kmin;
    }
 
 
@@ -111,9 +173,58 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T kmax(Collection<T> coll, int k, Comparator<T> comp) {
-	   //check(coll, comp);
+	   check(coll, comp);
 	   
-	   return null;
+	   if(k > coll.size() || k <= 0) {
+		   throw new NoSuchElementException();
+	   }
+	   
+	   T kmax = null;
+	   T tempMax = null;
+	   boolean firstIteration = true;
+	   boolean small = true;
+	   
+	   for(int i = 0; i < k; i++)
+	   {
+		   for(T value : coll)
+		   {
+			   if(tempMax == null)
+			   {
+				   tempMax = value;
+			   }
+			   
+			   if(firstIteration)
+			   {
+				   if(comp.compare(value, tempMax) > 0)
+					   tempMax = value;
+			   }
+			   else
+			   {
+				   if(small && comp.compare(value, kmax) < 0)
+				   {
+					   small = false;
+					   tempMax = value;;
+					   
+				   }
+				   else if(comp.compare(value, kmax) < 0 && comp.compare(value, tempMax) > 0)
+					   tempMax = value;
+			   }
+		   }
+		   
+		   
+	   }
+	   
+	   firstIteration = false;
+	   
+	   if(tempMax.equals(kmax)) {
+		   throw new NoSuchElementException();
+	   }
+	   else {
+		   kmax = tempMax;
+	   }
+	   
+	   return kmax;
+	   
    }
 
 
@@ -138,8 +249,21 @@ public final class Selector {
     */
    public static <T> Collection<T> range(Collection<T> coll, T low, T high, Comparator<T> comp) {
 	   
+	   check(coll, comp);
 	   
-      return null;
+	   Collection<T> currentRange = new ArrayList<T>();
+	   for(T value : coll)
+	   {
+		   if(comp.compare(value, low) >= 0 && comp.compare(value, high) <= 0)
+			   currentRange.add(value);
+	   }
+	   
+	   if(currentRange.size() == 0)
+	   {
+		   throw new NoSuchElementException();
+	   }
+	   
+      return currentRange;
    }
 
 
@@ -159,7 +283,31 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T ceiling(Collection<T> coll, T key, Comparator<T> comp) {
-      return null;
+      check(coll, comp);
+      
+      T finalCeiling = null;
+      boolean large = true;
+      
+      for(T value : coll) {
+    	  
+    	  if(large && comp.compare(value, key) >= 0)
+    	  {
+    		  large = false;
+    		  finalCeiling = value;
+    	  }
+    	  else if(comp.compare(value, key) >= 0 && comp.compare(value, finalCeiling) <= 0)
+    	  {
+    		  finalCeiling = value;
+    	  }
+      }
+      
+      if(finalCeiling == null)
+      {
+    	  throw new NoSuchElementException();
+      }
+	   
+	   
+	   return finalCeiling;
    }
 
 
@@ -179,7 +327,32 @@ public final class Selector {
     * @throws        NoSuchElementException as per above
     */
    public static <T> T floor(Collection<T> coll, T key, Comparator<T> comp) {
-      return null;
+      
+	   check(coll, comp);
+	   
+	   T finalFloor = null;
+	   boolean small = true;
+	   
+	   for(T value : coll)
+	   {
+		   if(small && comp.compare(value, key) <= 0)
+		   {
+			   small = false;
+			   finalFloor = value;
+		   }
+		   else if(comp.compare(value, key) <= 0 && comp.compare(value, finalFloor) >= 0)
+		   {
+			   finalFloor = value;
+		   }
+	   }
+	   
+	   if(finalFloor == null)
+	   {
+		   throw new NoSuchElementException();
+	   }
+	   
+	   
+	   return finalFloor;
    }
    
    private static <T> void check(Collection <T> coll, Comparator<T> comp)
