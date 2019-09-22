@@ -14,6 +14,10 @@ public class Playlist {
 
 	/** Calculates the total running time of a given list of songs. */
 	public static int runningTime(List<Song> playlist) {
+		
+		
+		
+		
 		return -99;
 	}
 
