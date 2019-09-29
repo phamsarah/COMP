@@ -15,10 +15,15 @@ public class Playlist {
 	/** Calculates the total running time of a given list of songs. */
 	public static int runningTime(List<Song> playlist) {
 		
+		int totalRunTime = 0;
 		
+		for(Song song: playlist)
+		{
+			totalRunTime += song.getDuration();
 		
+		}
 		
-		return -99;
+		return totalRunTime;
 	}
 
 	/** Drives execution. */

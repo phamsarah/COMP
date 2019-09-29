@@ -50,7 +50,6 @@ public class SelectorTest {
 	      arr.add(-7);
 	      arr.add(-5);
 	      arr.add(-7);
-	      //arr.add(9);
 	      System.out.println(Selector.kmax(arr, 1, ascendingInt));
 	   }
 	}
