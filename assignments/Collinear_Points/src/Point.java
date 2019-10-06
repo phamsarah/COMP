@@ -6,9 +6,9 @@ import java.util.Comparator;
  * in Quadrant I (x >= 0 and y >= 0). This class is designed to be
  * immutable.
  *
- * @author  YOUR NAME (you@auburn.edu)
+ * @author  Sarah Pham (slp0042@auburn.edu)
  * @author  Dean Hendrix (dh@auburn.edu)
- * @version TODAY
+ * @version 10/2/19
  *
  */
 public final class Point implements Comparable<Point> {
@@ -25,8 +25,15 @@ public final class Point implements Comparable<Point> {
     * negative, throw an IllegalArgumentException.
     */
    public Point(int x, int y) {
-      this.x = 0;
-      this.y = 0;
+	   
+	   if(x < 0 || y < 0) {
+		   throw new IllegalArgumentException();
+	   }
+	   
+	      
+	   this.x = x;
+	   this.y = y;
+      
    }
 
    /** 
@@ -72,7 +79,16 @@ public final class Point implements Comparable<Point> {
     */
    @Override
    public int compareTo(Point that) {
-      return -99;
+	   
+	   if(this.y != that.y) {
+		   return this.y - that.y;
+	   }
+	   
+	   else if(this.x != that.x) {
+		   return this.x - that.x;
+	   }
+	   
+	   return 0;
    }    
 
    /**
@@ -85,7 +101,23 @@ public final class Point implements Comparable<Point> {
     * negative infinity.
     */
    public double slopeTo(Point that) {
-      return ((double) 1) / ((double) 2);
+	   
+	   if((this.y == that.y) && (this.x == that.x)) {
+		   return Double.NEGATIVE_INFINITY;
+	   }
+	   
+	   else if (this.y == that.y) {
+		   return 0;
+	   }
+	   
+	   else if (this.x == that.x) {
+		   return Double.POSITIVE_INFINITY;
+	   }
+	   
+	   double result = (((double)(that.y) - (double)this.y) / ((double)that.x - (double)this.x));
+	
+	   return result;
+	  
    }
       
    /**
@@ -102,7 +134,20 @@ public final class Point implements Comparable<Point> {
        */
       @Override   
       public int compare(Point p1, Point p2) {
-         return -99;
+    	  
+    	  double s1 = slopeTo(p1);
+    	  double s2 = slopeTo(p2);
+    	  
+    	  if(s1 < s2) {
+    		  return -1;
+    	  }
+    	  
+    	  else if(s1 > s2) {
+    		  return 1;
+    	  }
+    	  
+    	  return 0;
+   
       }
    
    }

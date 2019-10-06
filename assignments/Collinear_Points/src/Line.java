@@ -7,9 +7,9 @@ import java.util.TreeSet;
  * Line.java
  * Models a line segment as a sorted set of points.
  *
- * @author  YOUR NAME (you@auburn.edu)
+ * @author  Sarah Pham (slp0042@auburn.edu)
  * @author  Dean Hendrix (dh@auburn.edu)
- * @version TODAY
+ * @version 10/5/19
  *
  */
 public class Line implements Comparable<Line>, Iterable<Point> {
@@ -30,6 +30,13 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     * Collection c.
     */
    public Line(Collection<Point> c) {
+	   
+	   line = new TreeSet<Point>();
+	   Iterator <Point> iterate = c.iterator();
+	   
+	   while(iterate.hasNext()) {
+		   add(iterate.next());
+	   }
 
    }
  
@@ -39,6 +46,20 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     * line is changed as a result, false otherwise.
     */
    public boolean add(Point p) {
+	   
+	   if(line.contains(p)) {
+		   return false;
+	   }
+	   else if(line.isEmpty()) {
+		   line.add(p);
+	   }
+	   else {
+		   if(line.first().slopeTo(p) == line.last().slopeTo(p)) {
+			   line.add(p);
+			   return true;
+		   }
+	   }
+	   
       return false;
    }
    
@@ -47,7 +68,12 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     * contains no points.
     */
    public Point first() {
-      return null;
+     
+	   if(line.isEmpty()) {
+		   return null;
+	   }
+	   
+	   return line.first();
    }
    
    /** 
@@ -55,14 +81,20 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     * contains no points.
     */
    public Point last() {
-      return null;
+	   
+	   if(line.isEmpty()) {
+		   return null;
+	   }
+	   
+      return line.last();
    }
    
    /** 
     * Returns the number of points in this line.
     */
    public int length() {
-      return -99;
+      
+	   return line.size();
    }
 
    /**
@@ -76,7 +108,36 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     */
    @Override
    public int compareTo(Line that) {
-      return -99;
+	   
+	   if(line.equals(that)) {
+			   return 0;
+		   }
+	   if(line.size() == 0) {
+		   
+		   if(that.length() == 0) {
+			   return 0;
+		   }
+		   
+		   return -1;
+	   }
+	   
+	   else if(that.length() == 0) {
+		   return 1;
+	   }
+	   else if (line.first().compareTo(that.first()) < 0) {
+		   return -1;
+	   }
+	   else if (line.first().compareTo(that.first()) > 0) {
+		   return 1;
+	   }
+	   else if(line.last().compareTo(that.last()) < 0) {
+		   return -1;
+	   }
+	   else if(line.last().compareTo(that.last()) > 0) {
+		   return 1;
+	   }
+	   
+	   return 0;
    }
 
    /** 
@@ -85,7 +146,10 @@ public class Line implements Comparable<Line>, Iterable<Point> {
     */
    @Override
    public Iterator<Point> iterator() {
-      return null;
+	   
+	   Iterator <Point> iterate = line.iterator();
+	   
+      return iterate;
    }
    
    /** 

@@ -10,9 +10,9 @@ import java.util.TreeSet;
  * Extractor.java. Implements feature extraction for collinear points in
  * two dimensional data.
  *
- * @author  YOUR NAME (you@auburn.edu)
+ * @author  Sarah Pham (slp0042@auburn.edu)
  * @author  Dean Hendrix (dh@auburn.edu)
- * @version TODAY
+ * @version 10/6/19
  *
  */
 public class Extractor {
@@ -22,12 +22,41 @@ public class Extractor {
    
    /** lines identified from raw data. */
    private SortedSet<Line> lines;
+   
+   private Iterator iterate;
   
    /**
     * Builds an extractor based on the points in the file named by filename. 
     */
    public Extractor(String filename) {
-
+	
+	   int i = 0;
+	   int x;
+	   int y;
+	   
+	   try {
+		   
+		   Scanner scnr = new Scanner(new File(filename));
+		   
+		   int pointLength = scnr.nextInt();
+		   points = new Point[pointLength];
+		   
+		   while(scnr.hasNext()) {
+			 x = scnr.nextInt();
+			 y = scnr.nextInt();
+			 
+			 Point addPoint = new Point(x,y);
+			 points[i] = addPoint;
+			 
+			 i++;
+			 
+		   }
+	   }
+	   catch(Exception e) {
+		   System.out.println("File Error");
+	   }
+		   
+	   
    }
   
    /**
@@ -46,6 +75,45 @@ public class Extractor {
     */
    public SortedSet<Line> getLinesBrute() {
       lines = new TreeSet<Line>();
+      
+      
+      Point[] tempArray = Arrays.copyOf(points, points.length);
+      
+      double s1; 
+      double s2;
+      double s3;
+      
+      
+      for(int i = 3; i < tempArray.length; i++) {
+    	  
+    	  for(int j = 2; j < i ; j++) {
+    		  
+    		  for(int k = 1; k < j; k++) {
+    			  
+    			  for(int l = 0; l < k; l++) {
+    				  
+    				  s1 = tempArray[i].slopeTo(tempArray[j]);
+    				  s2 = tempArray[i].slopeTo(tempArray[k]);
+    				  s3 = tempArray[i].slopeTo(tempArray[l]);
+    				  
+    				  if((s1 == s2) && (s2 == s3)) {
+    					  
+    					  Line tempLine = new Line();
+    					  
+    					  tempLine.add(tempArray[i]);
+    					  tempLine.add(tempArray[j]);
+    					  tempLine.add(tempArray[k]);
+    					  tempLine.add(tempArray[l]);
+    					  lines.add(tempLine);
+    					  
+    				  }
+    				  
+    			  }
+    		  }
+    	  }
+    	  
+      }
+      
       return lines;
    }
   
@@ -57,6 +125,47 @@ public class Extractor {
     */
    public SortedSet<Line> getLinesFast() {
       lines = new TreeSet<Line>();
+      this.iterate = lines.iterator();
+      int equal = 0;
+      int k;
+      
+      Point [] temp = Arrays.copyOf(points, points.length);
+      
+      for(int i = 0; i < points.length; i++) {
+    	  
+    	  Arrays.sort(temp, points[i].slopeOrder);
+    	  	
+    	  for(int j = 0; j < points.length - 1; j += equal) {
+    		
+    		  equal = 0;
+    		  k = 0;
+    		  
+    		  while((j + k < points.length) && ((points[i].slopeOrder.compare(temp[j], temp[j + k]) == 0))){
+    			  
+    			  k++;
+    			  equal++;
+    			  
+    		  }
+    	  
+    	  
+    	  if(equal > 2) {
+    		  
+    		  Line tempLine = new Line();
+    		  tempLine.add(points[i]);
+    		  
+    		  for(int l = 0; l < equal; l++) {
+    			  
+    			  tempLine.add(temp[j + l]);
+    			  
+    		  }
+    		  
+    		  lines.add(tempLine);
+    	  }
+    	  
+    	  }
+    	  
+      }
+      
       return lines;
    }
    
