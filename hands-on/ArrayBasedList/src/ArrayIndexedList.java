@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -58,7 +59,8 @@ public class ArrayIndexedList<T> implements IndexedList<T> {
 
 	/** Returns an iterator over the elements in this list. */
 	public Iterator<T> iterator() {
-		return null;
+		
+		return this.iterator();
 	}
 
 	/** Returns a string representation of this list. */
@@ -141,6 +143,22 @@ public class ArrayIndexedList<T> implements IndexedList<T> {
 	private void shiftRight(int index) {
 		assert !isFull();
 		// you must fill this in
+		int indexHolder = index;
+		if (index == 0) {
+			indexHolder = 1;
+		}
+		for(int i = (elements.length - 1); i >= indexHolder; i--){
+			elements[i] = elements[i - 1];
+			
+		}
+			
+		elements[index] = null;
+		System.out.println("Test");
+		for(T element: elements) {
+			System.out.println("New element: " + element);
+		}
+		
+		
 	}
 
 	/** Returns true if specified index is in the legal range, false otherwise. */

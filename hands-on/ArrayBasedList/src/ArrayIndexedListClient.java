@@ -25,5 +25,13 @@ public class ArrayIndexedListClient {
 		list.add("E", 5);
 
 		list.add("E", 1);
+
+		list.add("E", 1);
+		list.add("E", 1);
+
+		list.add("F", 0);
+
+		list.add("F", 0);
+		
 	}
 }
