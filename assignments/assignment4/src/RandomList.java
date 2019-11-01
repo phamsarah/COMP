@@ -17,21 +17,20 @@ public class RandomList <T> implements RandomizedList<T>{
 	private class Iterate implements Iterator<T>{
 
 		private T[] data;
-		private int i;
+		private int dataSize;
 		private int temp;
 		
 		public Iterate(T[] array, int amount) {
 			
-			temp = 0;
 			data = array;
-			i = amount;
-		}
-		
-		
+			dataSize = amount;
+			temp = 0;
+			
+			}
+
 		@Override
 		public boolean hasNext() {
-			
-			return (temp < size());
+			return (dataSize > 0);
 		}
 
 		@Override
@@ -41,7 +40,24 @@ public class RandomList <T> implements RandomizedList<T>{
 				throw new NoSuchElementException();
 			}
 			
-			return data[temp++];
+			Random rand = new Random();
+			temp = rand.nextInt(dataSize);
+			T next = data[temp];
+			
+			if(temp != (dataSize - 1)) {
+				
+				data[temp] = data[dataSize - 1];
+				data[dataSize - 1] = next;
+				
+			}
+			
+			dataSize--;
+			
+			return next;
+		}
+		
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 		
 	}
@@ -72,8 +88,9 @@ public class RandomList <T> implements RandomizedList<T>{
 	@Override
 	public Iterator<T> iterator() {
 	
-		Iterate iterate = new Iterate(element, size());
-		return null;
+		Iterate iterate = new Iterate(this.element, size());
+		
+		return iterate;
 	}
 
 	@Override
@@ -83,16 +100,35 @@ public class RandomList <T> implements RandomizedList<T>{
 			throw new IllegalArgumentException();
 		}
 		
+		this.element[size()] = element;
+	    this.length++;
+		
 		if(this.length == this.element.length) {
 			resize(this.element.length * 2);
 		}
+		
 		
 	}
 
 	@Override
 	public T remove() {
 		
-		throw new UnsupportedOperationException();
+		if(size() == 0) {
+			return null;
+		}
+		
+		int temp = new Random().nextInt(size());
+		
+		T remove = this.element[temp];
+		this.element[temp] = element[size() - 1];
+		this.element[size() - 1] = null;
+		this.length--;
+		
+		if(size() > 0 && size() < this.element.length / 4) {
+			resize(this.element.length / 2);
+		}
+		
+		return remove;
 	}
 
 	@Override
