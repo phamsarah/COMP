@@ -37,8 +37,7 @@ public class ExampleGameClient {
     		  "E","M","B","L","Y","O","Z","F","P","L","S","C","I","T","L","U","M","O","N","I","T","O","R","J","W","I",
     		  "N","L","L","L","E","L","J","R","R","E","M","M","O","B","D","X","I","J","D","S","R","L","C","H","S","H",
     		  "Y","U","L","P","M","O","U","S","E","C","B","I","I","U","I"});
-      System.out.print("TIGER is on the board at the following positions: ");
-      System.out.println(game.isOnBoard("TIGER"));
+
       System.out.println(game.getAllValidWords(10));
    }
 }

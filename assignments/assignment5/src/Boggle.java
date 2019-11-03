@@ -175,14 +175,21 @@ public class Boggle implements WordSearchGame {
 	
 	@Override
 	public boolean isValidPrefix(String prefixToCheck) {
-		
+
 		checkException();
 		
 		if(prefixToCheck == null){
 			throw new IllegalArgumentException();
 		}
 		
-		return lexicon.ceiling(prefixToCheck).startsWith(prefixToCheck);
+		
+		if(lexicon.ceiling(prefixToCheck) == null) {
+			return false;
+		}
+		else {
+			return lexicon.ceiling(prefixToCheck).startsWith(prefixToCheck);
+		}
+	
 	}
 
 	
