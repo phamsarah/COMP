@@ -21,7 +21,12 @@ public class ExampleClient {
 
     /** Drives execution. */
     public static void main(String[] args) throws FileNotFoundException {
-        WordLadderGame doublets = new Doublets(new FileInputStream(new File("sowpods.txt")));
+    	
+    	/**
+    	 *       WordSearchGame game = WordSearchGameFactory.createGame();
+      				game.loadLexicon("/home/sarah/Downloads/wordfiles/words.txt");
+    	 */
+        WordLadderGame doublets = new Doublets(new FileInputStream(new File("/home/sarah/Downloads/WordLists/sowpods.txt")));
 
         System.out.println(doublets.getHammingDistance("tiger", "tiger"));
         System.out.println(doublets.getHammingDistance("tiger", "eagle"));

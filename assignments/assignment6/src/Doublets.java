@@ -32,6 +32,10 @@ public class Doublets implements WordLadderGame {
     // ARE TreeSet (a red-black tree) OR HashSet (a closed addressed hash      //
     // table with chaining).
     /////////////////////////////////////////////////////////////////////////////
+	
+	List<String> empty = new ArrayList();
+	TreeSet <String> lexicon;
+	int count;
 
     /**
      * Instantiates a new instance of Doublets with the lexicon populated with
@@ -41,16 +45,14 @@ public class Doublets implements WordLadderGame {
      */
     public Doublets(InputStream in) {
         try {
-            //////////////////////////////////////
-            // INSTANTIATE lexicon OBJECT HERE  //
-            //////////////////////////////////////
+        	
+        	lexicon = new TreeSet<String>();
+        	
             Scanner s =
                 new Scanner(new BufferedReader(new InputStreamReader(in)));
             while (s.hasNext()) {
                 String str = s.next();
-                /////////////////////////////////////////////////////////////
-                // INSERT CODE HERE TO APPROPRIATELY STORE str IN lexicon. //
-                /////////////////////////////////////////////////////////////
+                lexicon.add(str.toLowerCase());
                 s.nextLine();
             }
             in.close();
@@ -61,46 +63,103 @@ public class Doublets implements WordLadderGame {
         }
     }
 
-	@Override
+    //////////////////////////////////////////////////////////////
+    // ADD IMPLEMENTATIONS FOR ALL WordLadderGame METHODS HERE  //
+    //////////////////////////////////////////////////////////////
+
+    
+    @Override
 	public int getHammingDistance(String str1, String str2) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+    	int temp = 0;
+    	
+    	if(str1.length() != str2.length()){
+    		return -1;
+    	}
+    	
+    	char[] firstString = str1.toCharArray();
+    	char[] secondString = str2.toCharArray();
+    	
+    	for(int i = 0; i < str1.length(); i++) {
+    		if(firstString[i] != secondString[i]) {
+    			temp++;
+    		}
+    	}
+    	
+		return temp;
 	}
 
 	@Override
 	public List<String> getMinLadder(String start, String end) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getNeighbors(String word) {
-		// TODO Auto-generated method stub
-		return null;
+	
+		ArrayList temp = new ArrayList();
+		
+		for(String s: lexicon) {
+			if(getHammingDistance(word,s) == 1) {
+				temp.add(s);
+			}
+		}
+		
+		if(temp.isEmpty()) {
+			return empty;
+		}
+		
+		return temp;
 	}
 
 	@Override
 	public int getWordCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return lexicon.size();
 	}
 
 	@Override
 	public boolean isWord(String str) {
-		// TODO Auto-generated method stub
+		
+		if(lexicon.contains(str)) {
+			return true;
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean isWordLadder(List<String> sequence) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		if(sequence.isEmpty()) {
+			return false;
+		}
+		
+		for(int i = 0; i < sequence.size() - 1; i++) {
+			if(getHammingDistance(sequence.get(i), sequence.get(i + 1)) != 1) {
+				return false;
+			}
+		}
+		
+		for(int j = 0; j < sequence.size(); j++) {
+			if(!lexicon.contains(sequence.get(j))) {
+				return false;
+			}
+				
+		}
+		
+		return true;
 	}
-
-
-    //////////////////////////////////////////////////////////////
-    // ADD IMPLEMENTATIONS FOR ALL WordLadderGame METHODS HERE  //
-    //////////////////////////////////////////////////////////////
-
+	
+	private class Node{
+		String data;
+		int step;
+		
+		public Node(String data, int step) {
+			this.data = data;
+			this.step = step;
+		}
+	}
+	
 }
 
