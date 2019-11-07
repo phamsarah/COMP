@@ -7,12 +7,15 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 
 import java.util.stream.Collectors;
+
+
 
 /**
  * Provides an implementation of the WordLadderGame interface. 
@@ -68,6 +71,8 @@ public class Doublets implements WordLadderGame {
     //////////////////////////////////////////////////////////////
 
     
+    
+    
     @Override
 	public int getHammingDistance(String str1, String str2) {
 		
@@ -89,35 +94,68 @@ public class Doublets implements WordLadderGame {
 		return temp;
 	}
 
+    
+    
 	@Override
 	public List<String> getMinLadder(String start, String end) {
-		return null;
-	}
-
-	@Override
-	public List<String> getNeighbors(String word) {
-	
-		ArrayList temp = new ArrayList();
 		
-		for(String s: lexicon) {
-			if(getHammingDistance(word,s) == 1) {
-				temp.add(s);
-			}
+		start = start.toLowerCase();
+		end = end.toLowerCase();
+		
+		ArrayList<String> reverse = new ArrayList<String>();
+		List<String> minimum = new ArrayList<String>();
+		
+		if(start.equals(end)) {
+			minimum.add(start);
+			return minimum;
 		}
 		
-		if(temp.isEmpty()) {
+		if(getHammingDistance(start,end) == -1) {
 			return empty;
 		}
 		
-		return temp;
+		if(isWord(start) && isWord(end)) {
+			reverse = search(start, end);
+		}
+		
+		
+		for(int i = reverse.size() - 1; i >= 0; i--) {
+			minimum.add(reverse.get(i));
+		}
+		
+		
+		return minimum;
 	}
 
+	
+	@Override
+	public List<String> getNeighbors(String word) {
+	
+		List<String> neighbors = new ArrayList<String>();
+		Iterator <String> iterate = lexicon.iterator();
+		
+		while(iterate.hasNext()) {
+			String temp = iterate.next();
+			
+			if(getHammingDistance(word,temp) == 1) {
+				neighbors.add(temp);
+			}
+		}
+		
+		return neighbors;
+		
+	}
+
+	
+	
 	@Override
 	public int getWordCount() {
 	
 		return lexicon.size();
 	}
 
+	
+	
 	@Override
 	public boolean isWord(String str) {
 		
@@ -128,6 +166,8 @@ public class Doublets implements WordLadderGame {
 		return false;
 	}
 
+	
+	
 	@Override
 	public boolean isWordLadder(List<String> sequence) {
 		
@@ -151,13 +191,66 @@ public class Doublets implements WordLadderGame {
 		return true;
 	}
 	
+	
+	
+	private ArrayList<String> search(String start, String end){
+		
+		Deque<Node> lineQueue = new ArrayDeque<Node>();
+		HashSet<String> taken = new HashSet<String>();
+		ArrayList<String> reverse = new ArrayList<String>();
+		
+		taken.add(start);
+		lineQueue.addLast(new Node(start,null));
+		
+		Node lastNode = new Node(end, null);
+		
+		
+		outerloop:
+			while(!lineQueue.isEmpty()) {
+				
+				Node temp = lineQueue.removeFirst();
+				String word = temp.data;
+				
+				List<String> neighbors = getNeighbors(word);
+				
+				for(String neighbor : neighbors){
+					
+					if(!taken.contains(neighbors)) {
+						taken.add(neighbor);
+						lineQueue.addLast(new Node(neighbor, temp));
+						
+						if(neighbor.equals(end)) {
+							lastNode.previous = temp;
+							break outerloop;
+						}
+					}
+				}
+			}
+		
+		
+		if(lastNode.previous == null) {
+			return reverse;
+		}
+		
+		Node temp = lastNode;
+		
+		while(temp != null) {
+			reverse.add(temp.data);
+			temp = temp.previous;
+		}
+		
+		return reverse;
+	}
+	
+	
+	
 	private class Node{
 		String data;
-		int step;
+		Node previous;
 		
-		public Node(String data, int step) {
+		public Node(String data, Node previous) {
 			this.data = data;
-			this.step = step;
+			this.previous = previous;
 		}
 	}
 	
