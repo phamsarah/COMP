@@ -24,7 +24,7 @@ public class ExampleClient {
     	
     	/**
     	 *       WordSearchGame game = WordSearchGameFactory.createGame();
-      				game.loadLexicon("/home/sarah/Downloads/wordfiles/words.txt");
+      				game.loadLexicon("/home/sarah/Downloads/wordfiles/sowpods.txt");
     	 */
         WordLadderGame doublets = new Doublets(new FileInputStream(new File("/home/sarah/Downloads/WordLists/sowpods.txt")));
 
@@ -45,6 +45,7 @@ public class ExampleClient {
         System.out.println(doublets.getNeighbors("tiger"));
 
         System.out.println(doublets.getMinLadder("cat", "hat"));
+        System.out.println(doublets.getMinLadder("cat", "dog"));
     }
 }
 

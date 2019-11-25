@@ -130,17 +130,31 @@ public class Doublets implements WordLadderGame {
 	
 	@Override
 	public List<String> getNeighbors(String word) {
-	
-		List<String> neighbors = new ArrayList<String>();
-		Iterator <String> iterate = lexicon.iterator();
 		
-		while(iterate.hasNext()) {
-			String temp = iterate.next();
+		List<String> neighbors = new ArrayList<String>();
+		char[] generateNeighbors = word.toCharArray();
+		
+		
+		for(int i = 0; i < word.length(); i++) { 
 			
-			if(getHammingDistance(word,temp) == 1) {
-				neighbors.add(temp);
+			for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
+				
+				if(generateNeighbors[i] != alphabet) {	
+					
+					generateNeighbors[i] = alphabet;
+					String temp = new String(generateNeighbors);
+					
+					if(lexicon.contains(temp) && (temp.compareTo(word) != 0)) {
+						neighbors.add(temp);
+					}
+					
+				}
+				
 			}
+			
+			generateNeighbors = word.toCharArray();
 		}
+		
 		
 		return neighbors;
 		
@@ -215,7 +229,7 @@ public class Doublets implements WordLadderGame {
 				
 				for(String neighbor : neighbors){
 					
-					if(!taken.contains(neighbors)) {
+					if(!taken.contains(neighbor)) {
 						taken.add(neighbor);
 						lineQueue.addLast(new Node(neighbor, temp));
 						
