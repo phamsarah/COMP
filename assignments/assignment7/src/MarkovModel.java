@@ -11,7 +11,7 @@ import java.util.Set;
  * the model. A kgram is a sequence of k consecutive characters in the source
  * text.
  *
- * @author     Your Name (you@auburn.edu)
+ * @author     Sarah Pham (slp0042@auburn.edu)
  * @author     Dean Hendrix (dh@auburn.edu)
  * @version    2018-04-17
  *
@@ -23,12 +23,15 @@ public class MarkovModel {
 
    // add other fields as you need them ...
 
+   private String sourceText = "";
+   private int K;
+   private int length;
 
    /**
     * Reads the contents of the file sourceText into a string, then calls
     * buildModel to construct the order K model.
     *
-    * DO NOT CHANGE THIS CONSTRUCTOR.
+    * DO NOT CHANGE THIS CONSTRUCTOR.assignment 
     *
     */
    public MarkovModel(int K, File sourceText) {
@@ -59,19 +62,34 @@ public class MarkovModel {
     * Builds an order K Markov model of the string sourceText.
     */
    private void buildModel(int K, String sourceText) {
+	   this.sourceText = sourceText;
+	   this.K = K;
+	   this.length = sourceText.length();
 
+	   
+	   for(int i = 0; i < length-K; i++){
+		   String key = sourceText.substring(i, i + K);
+		   
+		   String value = model.getOrDefault(key, "").concat(sourceText.substring(i+K, i+K+1));
+		   
+		   model.put(key, value);
+	   }
    }
 
 
    /** Returns the first kgram found in the source text. */
    public String getFirstKgram() {
-      return null;
+	   return sourceText.substring(0, K);
    }
 
 
    /** Returns a kgram chosen at random from the source text. */
    public String getRandomKgram() {
-      return null;
+      
+	  Random rnd = new Random();
+      int index = rnd.nextInt(this.length - K);
+      
+	  return sourceText.substring(index, index + this.K);
    }
 
 
@@ -93,7 +111,13 @@ public class MarkovModel {
     * text.
     */
    public char getNextChar(String kgram) {
-      return '\u0000';
+	   
+	   Random rnd = new Random();
+	   String value = model.get(kgram);
+	   int valueLen = value.length();
+	   
+	   return value.charAt(rnd.nextInt(valueLen));
+	   
    }
 
 

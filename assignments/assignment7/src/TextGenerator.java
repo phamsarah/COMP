@@ -5,7 +5,7 @@ import java.io.IOException;
  * TextGenerator.java. Creates an order K Markov model of the supplied source
  * text, and then outputs M characters generated according to the model.
  *
- * @author     Your Name (you@auburn.edu)
+ * @author     Sarah Pham (slp0042@auburn.edu)
  * @author     Dean Hendrix (dh@auburn.edu)
  * @version    2018-04-17
  *
@@ -44,6 +44,15 @@ public class TextGenerator {
       // instantiate a MarkovModel with the supplied parameters and
       // generate sample output text ...
 
+      MarkovModel model = new MarkovModel(K, text);
+      String kgram = model.getRandomKgram();
+      String sampleText = kgram;
+      
+      for(int i = 0; i < M; i++) {
+    	  sampleText = sampleText + model.getNextChar(kgram);
+    	  kgram = sampleText.substring(sampleText.length() - K, sampleText.length());
+    	  System.out.println("Sample text: " + sampleText);
+      }
 
    }
 }
